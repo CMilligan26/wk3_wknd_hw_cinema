@@ -51,10 +51,19 @@ class Screening
     SqlRunner.run(sql)
   end
 
+  #UPDATE SELF FROM DATABASE
+  def update_from_database()
+    sql = "SELECT * FROM screenings WHERE id = $1"
+    values = [@id]
+    data = SqlRunner.run(sql, values)
+    new_data = Screening.map_items(data)
+    @tickets_available = new_data.first.tickets_available.to_i
+  end
+
   #MAP
 
   def self.map_items(screenings)
-   result = data.map{|screening| Screening.new(screening)}
+   result = screenings.map{|screening| Screening.new(screening)}
    return result
   end
 

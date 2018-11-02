@@ -99,7 +99,7 @@ class Ticket
   #MAP
 
   def self.map_items(tickets)
-    result = data.map{|ticket| Ticket.new(ticket)}
+    result = tickets.map{|ticket| Ticket.new(ticket)}
     return result
   end
 

@@ -52,7 +52,7 @@ class Screen
   #MAP
 
   def self.map_items(screens)
-   result = data.map{|screen| Screen.new(screen)}
+   result = screens.map{|screen| Screen.new(screen)}
    return result
   end
 

@@ -52,8 +52,8 @@ class CinemaLocation
   #MAP
 
   def self.map_items(cinema_locations)
-   result = data.map{|cinema_location| CinemaLocation.new(cinema_location)}
+   result = cinema_locations.map{|cinema_location| CinemaLocation.new(cinema_location)}
    return result
   end
-  
+
 end

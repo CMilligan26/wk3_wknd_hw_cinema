@@ -50,10 +50,20 @@ class Customer
     SqlRunner.run(sql)
   end
 
+  #UPDATE SELF FROM DATABASE
+  def update_from_database()
+    sql = "SELECT * FROM customers WHERE id = $1"
+    values = [@id]
+    data = SqlRunner.run(sql, values)
+    new_data = Customer.map_items(data)
+    @name = new_data.first.name
+    @funds = new_data.first.funds.to_i
+  end
+
   #MAP
 
   def self.map_items(customers)
-    result = data.map{|customer| Customer.new(customer)}
+    result = customers.map{|customer| Customer.new(customer)}
     return result
   end
 
