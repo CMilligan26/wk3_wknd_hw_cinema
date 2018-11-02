@@ -23,9 +23,9 @@ class Film
   #R
 
   def self.all()
-  sql = "SELECT * FROM films"
-  films = SqlRunner.run(sql)
-  return Film.map_items(films)
+    sql = "SELECT * FROM films"
+    films = SqlRunner.run(sql)
+    return Film.map_items(films)
   end
 
   #U
@@ -52,6 +52,26 @@ class Film
   #MAP
 
   def self.map_items(films)
-   result = data.map{|film| Film.new(film)}
-   return result
+    result = data.map{|film| Film.new(film)}
+    return result
+  end
+
+  def customers
+    sql = "SELECT COUNT(*)
+    FROM
+    (
+      SELECT customers.*
+      FROM customers
+      INNER JOIN tickets
+      ON customers.id = tickets.customer_id
+      INNER JOIN screenings
+      ON tickets.screening_id = screenings.id
+      INNER JOIN films
+      ON screenings.film_id = films.id
+      WHERE film_id = $1
+      ) alias;"
+      values = [@id]
+      return SqlRunner.run(sql, values).map{ |hash| hash['count']}.join.to_i
+    end
+
   end

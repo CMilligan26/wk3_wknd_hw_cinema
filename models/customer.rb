@@ -1,4 +1,5 @@
 require_relative("../db/sql_runner")
+require_relative("./film")
 
 class Customer
 
@@ -23,9 +24,9 @@ class Customer
   #R
 
   def self.all()
-  sql = "SELECT * FROM customers"
-  customers = SqlRunner.run(sql)
-  return Customer.map_items(customers)
+    sql = "SELECT * FROM customers"
+    customers = SqlRunner.run(sql)
+    return Customer.map_items(customers)
   end
 
   #U
@@ -52,6 +53,26 @@ class Customer
   #MAP
 
   def self.map_items(customers)
-   result = data.map{|customer| Customer.new(customer)}
-   return result
+    result = data.map{|customer| Customer.new(customer)}
+    return result
+  end
+
+  #Show films customer has tickets extend for
+
+  def tickets
+    sql = "SELECT COUNT(*)
+    FROM
+    (
+      SELECT films.*
+      FROM films
+      INNER JOIN screenings
+      ON films.id = screenings.film_id
+      INNER JOIN tickets
+      ON screenings.id = tickets.screening_id
+      WHERE customer_id = $1
+      ) alias;"
+      values = [@id]
+      return SqlRunner.run(sql, values).map{ |hash| hash['count']}.join.to_i
+    end
+
   end

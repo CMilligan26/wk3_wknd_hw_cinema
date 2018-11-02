@@ -55,3 +55,5 @@ class CinemaLocation
    result = data.map{|cinema_location| CinemaLocation.new(cinema_location)}
    return result
   end
+  
+end

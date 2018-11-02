@@ -7,9 +7,9 @@ class Screening
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
-    @film_id = options['film_id']
+    @film_id = options['film_id'].to_i
     @showing_time = options['showing_time']
-    @screen_id = options['screen_id']
+    @screen_id = options['screen_id'].to_i
     @tickets_available = options['tickets_available']
   end
 
@@ -57,3 +57,5 @@ class Screening
    result = data.map{|screening| Screening.new(screening)}
    return result
   end
+
+end

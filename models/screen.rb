@@ -7,7 +7,7 @@ class Screen
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
-    @cinema_location_id = options['cinema_location_id']
+    @cinema_location_id = options['cinema_location_id'].to_i
     @screen_number = options['screen_number']
   end
 
@@ -55,3 +55,5 @@ class Screen
    result = data.map{|screen| Screen.new(screen)}
    return result
   end
+
+end
