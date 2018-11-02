@@ -39,18 +39,22 @@ screen1.save
 screen2.save
 
 screening1 = Screening.new({'film_id' => film1.id, 'showing_time' => '2018-11-11 18:30:00', 'screen_id' => screen1.id, 'tickets_available' => 12})
+screening3 = Screening.new({'film_id' => film1.id, 'showing_time' => '2018-11-11 14:30:00', 'screen_id' => screen1.id, 'tickets_available' => 12})
 screening2 = Screening.new({'film_id' => film2.id, 'showing_time' => '2018-11-13 20:30:00', 'screen_id' => screen2.id, 'tickets_available' => 8})
 
 screening1.save
 screening2.save
+screening3.save
 
 ticket1 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => screening1.id})
-ticket2 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => screening1.id})
+ticket2 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => screening2.id})
 ticket3 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => screening2.id})
+ticket4 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => screening3.id})
 
 ticket1.save
 ticket2.save
 ticket3.save
+ticket4.save
 
 
 binding.pry

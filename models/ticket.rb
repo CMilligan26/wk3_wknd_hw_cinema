@@ -18,14 +18,43 @@ class Ticket
     values = [@customer_id, @screening_id]
     ticket = SqlRunner.run(sql, values).first
     @id = ticket['id'].to_i
+    charge_customer
   end
+
+  #Update customer funds
+
+  def get_film_price
+    sql = "SELECT films.price
+    FROM films
+    INNER JOIN screenings
+    ON films.id = screenings.film_id
+    INNER JOIN tickets
+    ON screenings.id = tickets.screening_id
+    WHERE tickets.id = $1"
+    values = [@id]
+    return SqlRunner.run(sql, values).map{ |hash| hash['price']}.join.to_i
+  end
+
+  def charge_customer
+    sql = "SELECT customers.funds
+          FROM customers
+          WHERE customers.id = $1"
+    values = [@customer_id]
+    customer_funds = SqlRunner.run(sql, values).map{ |hash| hash['funds']}.join.to_i
+    new_customer_funds = customer_funds -= get_film_price
+    sql = "UPDATE customers SET funds = $1 WHERE id = $2"
+    values = [new_customer_funds, @customer_id]
+    SqlRunner.run(sql, values)
+  end
+
+
 
   #R
 
   def self.all()
-  sql = "SELECT * FROM tickets"
-  tickets = SqlRunner.run(sql)
-  return Ticket.map_items(tickets)
+    sql = "SELECT * FROM tickets"
+    tickets = SqlRunner.run(sql)
+    return Ticket.map_items(tickets)
   end
 
   #U
@@ -52,8 +81,8 @@ class Ticket
   #MAP
 
   def self.map_items(tickets)
-   result = data.map{|ticket| Ticket.new(ticket)}
-   return result
+    result = data.map{|ticket| Ticket.new(ticket)}
+    return result
   end
 
 end
