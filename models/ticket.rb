@@ -14,11 +14,14 @@ class Ticket
   #C
 
   def save()
+    if get_available_tickets >= 1
     sql = "INSERT INTO tickets (customer_id, screening_id) VALUES ($1, $2) RETURNING id"
     values = [@customer_id, @screening_id]
     ticket = SqlRunner.run(sql, values).first
     @id = ticket['id'].to_i
     charge_customer
+    sell_ticket
+    end
   end
 
   #Update customer funds
@@ -47,7 +50,22 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
+  #Get available tickets
 
+  def get_available_tickets
+    sql = "SELECT screenings.tickets_available
+    FROM screenings
+    WHERE screenings.id = $1"
+    values = [@screening_id]
+    return SqlRunner.run(sql, values).map{ |hash| hash['tickets_available']}.join.to_i
+  end
+
+  def sell_ticket
+    new_available_tickets = get_available_tickets-1
+    sql = "UPDATE screenings SET tickets_available = $1 WHERE id = $2"
+    values = [new_available_tickets, @screening_id]
+    SqlRunner.run(sql, values)
+  end
 
   #R
 

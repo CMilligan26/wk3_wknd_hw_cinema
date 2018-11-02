@@ -76,13 +76,13 @@ class Film
 
     def popular_time
       sql = "SELECT screenings.showing_time
-FROM screenings
-INNER JOIN tickets
-ON tickets.screening_id = screenings.id
-WHERE screenings.film_id = $1
-GROUP BY screenings.showing_time
-ORDER BY COUNT(screenings.showing_time) DESC
-LIMIT 1;"
+      FROM screenings
+      INNER JOIN tickets
+      ON tickets.screening_id = screenings.id
+      WHERE screenings.film_id = $1
+      GROUP BY screenings.showing_time
+      ORDER BY COUNT(screenings.showing_time) DESC
+      LIMIT 1;"
       values = [@id]
       return SqlRunner.run(sql, values).map{ |hash| hash['showing_time']}.join
     end
