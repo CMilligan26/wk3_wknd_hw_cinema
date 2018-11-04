@@ -39,7 +39,7 @@ class Screen
   #D
 
   def delete()
-    sql = "DELETE * from screens where id = $1"
+    sql = "DELETE FROM screens WHERE id = $1"
     values = [@id]
     SqlRunner.run(sql, values)
   end

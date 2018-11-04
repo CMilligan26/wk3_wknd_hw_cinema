@@ -39,7 +39,7 @@ class Film
   #D
 
   def delete()
-    sql = "DELETE * from films where id = $1"
+    sql = "DELETE FROM films WHERE id = $1"
     values = [@id]
     SqlRunner.run(sql, values)
   end
@@ -57,9 +57,7 @@ class Film
   end
 
   def customers
-    sql = "SELECT COUNT(*)
-    FROM
-    (
+    sql = "
       SELECT customers.*
       FROM customers
       INNER JOIN tickets
@@ -68,11 +66,17 @@ class Film
       ON tickets.screening_id = screenings.id
       INNER JOIN films
       ON screenings.film_id = films.id
-      WHERE film_id = $1
-      ) alias;"
+      WHERE film_id = $1"
       values = [@id]
-      return SqlRunner.run(sql, values).map{ |hash| hash['count']}.join.to_i
+      customers = SqlRunner.run(sql, values)
+      return Customer.map_items(customers)
     end
+
+  def count_customers
+    customers.length
+    end
+
+    #Refactored
 
     def popular_time
       sql = "SELECT screenings.showing_time

@@ -41,7 +41,7 @@ class Screening
   #D
 
   def delete()
-    sql = "DELETE * from screenings where id = $1"
+    sql = "DELETE FROM screenings WHERE id = $1"
     values = [@id]
     SqlRunner.run(sql, values)
   end
